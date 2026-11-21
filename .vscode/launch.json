@@ -8,6 +8,14 @@
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/out/**/*.js"],
       "preLaunchTask": "npm: compile"
+    },
+    {
+      "name": "Run Extension on Fixture Repo",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": ["${workspaceFolder}/.vscode-test/fixture-repo", "--extensionDevelopmentPath=${workspaceFolder}"],
+      "outFiles": ["${workspaceFolder}/out/**/*.js"],
+      "preLaunchTask": "compile and prepare fixture"
     }
   ]
 }
