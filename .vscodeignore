@@ -1,0 +1,8 @@
+src/**
+.vscode/**
+tsconfig.json
+TASKBENCH_SPEC.md
+CLAUDE.md
+AGENTS.md
+.gitignore
+*.vsix

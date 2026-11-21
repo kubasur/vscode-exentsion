@@ -1,0 +1,36 @@
+{
+  "name": "taskbench",
+  "displayName": "Taskbench",
+  "description": "Hand work to an AI coding agent in its own git worktree, then review the change and its structure visually.",
+  "version": "0.0.1",
+  "private": true,
+  "publisher": "taskbench",
+  "license": "UNLICENSED",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "taskbench.hello",
+        "title": "Taskbench: Hello"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package --allow-missing-repository --skip-license"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "@types/vscode": "~1.95.0",
+    "@vscode/vsce": "^4.1.1",
+    "typescript": "~5.9.3"
+  }
+}
