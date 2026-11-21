@@ -13,6 +13,21 @@
       "presentation": {
         "reveal": "silent"
       }
+    },
+    {
+      "type": "npm",
+      "script": "fixture",
+      "label": "npm: fixture",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "compile and prepare fixture",
+      "dependsOn": ["npm: compile", "npm: fixture"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
     }
   ]
 }

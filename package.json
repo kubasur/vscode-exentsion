@@ -17,24 +17,170 @@
     "Other"
   ],
   "main": "./out/extension.js",
-  "activationEvents": [],
+  "activationEvents": [
+    "onWebviewPanel:taskbench.taskPage"
+  ],
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "taskbench",
+          "title": "Taskbench",
+          "icon": "media/taskbench.svg"
+        }
+      ]
+    },
+    "views": {
+      "taskbench": [
+        {
+          "id": "taskbench.tasks",
+          "name": "Tasks",
+          "icon": "media/taskbench.svg",
+          "contextualTitle": "Taskbench"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "taskbench.tasks",
+        "contents": "No tasks yet. Each task gets its own git worktree and branch, so the agent's work stays separate from yours.\n[New Task](command:taskbench.newTask)",
+        "when": "taskbench.state == ready"
+      },
+      {
+        "view": "taskbench.tasks",
+        "contents": "Taskbench works on a git repository. Open a folder that is inside one.\n[Open Folder](command:vscode.openFolder)",
+        "when": "taskbench.state == noRepo"
+      }
+    ],
     "commands": [
       {
-        "command": "taskbench.hello",
-        "title": "Taskbench: Hello"
+        "command": "taskbench.newTask",
+        "title": "New Task",
+        "category": "Taskbench",
+        "icon": "$(add)"
+      },
+      {
+        "command": "taskbench.open",
+        "title": "Open Task Page",
+        "category": "Taskbench",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "taskbench.openWorktree",
+        "title": "Open Worktree in New Window",
+        "category": "Taskbench",
+        "icon": "$(empty-window)"
+      },
+      {
+        "command": "taskbench.archive",
+        "title": "Archive",
+        "category": "Taskbench",
+        "icon": "$(archive)"
+      },
+      {
+        "command": "taskbench.refresh",
+        "title": "Refresh",
+        "category": "Taskbench",
+        "icon": "$(refresh)"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "taskbench.newTask",
+          "when": "view == taskbench.tasks && taskbench.state == ready",
+          "group": "navigation@1"
+        },
+        {
+          "command": "taskbench.refresh",
+          "when": "view == taskbench.tasks",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "taskbench.openWorktree",
+          "when": "view == taskbench.tasks && viewItem =~ /^(task|exploration)$/",
+          "group": "inline@1"
+        },
+        {
+          "command": "taskbench.open",
+          "when": "view == taskbench.tasks && viewItem =~ /^(task|exploration)$/",
+          "group": "1_open@1"
+        },
+        {
+          "command": "taskbench.openWorktree",
+          "when": "view == taskbench.tasks && viewItem =~ /^(task|exploration)$/",
+          "group": "1_open@2"
+        },
+        {
+          "command": "taskbench.archive",
+          "when": "view == taskbench.tasks && viewItem =~ /^(task|exploration)$/",
+          "group": "9_archive@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "taskbench.newTask",
+          "when": "taskbench.state == ready"
+        },
+        {
+          "command": "taskbench.open",
+          "when": "taskbench.state == ready"
+        },
+        {
+          "command": "taskbench.openWorktree",
+          "when": "taskbench.state == ready"
+        },
+        {
+          "command": "taskbench.archive",
+          "when": "taskbench.state == ready"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Taskbench",
+      "properties": {
+        "taskbench.worktreeRoot": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Folder that holds each task's git worktree. Absolute, or relative to the repository root. Empty means `../<repo>.tasks` next to the repository."
+        },
+        "taskbench.baseBranch": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Branch new tasks start from and are diffed against (through the merge-base). Empty means the repository's default branch."
+        }
+      }
+    }
   },
   "scripts": {
-    "compile": "tsc -p ./",
+    "compile": "npm run compile:extension && npm run compile:webview",
+    "compile:extension": "tsc -p ./",
+    "compile:webview": "tsc -p webview && node esbuild.mjs",
     "watch": "tsc -watch -p ./",
-    "package": "vsce package --skip-license"
+    "watch:webview": "node esbuild.mjs --watch",
+    "vscode:prepublish": "npm run compile:extension && tsc -p webview && node esbuild.mjs --production",
+    "package": "vsce package --skip-license",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "fixture": "bash test/fixtures/dev-fixture.sh",
+    "fixture:reset": "bash test/fixtures/dev-fixture.sh --reset"
   },
   "devDependencies": {
+    "@types/markdown-it": "^14.2.0",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^20.19.43",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@types/vscode": "~1.95.0",
+    "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^4.1.1",
+    "esbuild": "^0.28.2",
+    "markdown-it": "^15.0.3",
+    "mocha": "^11.8.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "typescript": "~5.9.3"
   }
 }
