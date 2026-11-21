@@ -2,8 +2,6 @@
 
 Taskbench is a VS Code extension for handing work to an AI coding agent (Codex CLI) and reviewing what it did. Each Task or Exploration gets its own git worktree and branch, with its PR description and the agent's notes kept beside the code. Every diff is computed against the merge-base, like a GitHub PR, and structure views (import graph, call graph and dependency matrix) make encapsulation breaks, upward imports and new cycles visible at a glance. The full product spec is in `TASKBENCH_SPEC.md` in this folder.
 
-> For now this extension lives in the `taskbench/` folder of the `cov-form` repository. Open **this folder** (not the repository root) in VS Code, and run every command below from it.
-
 ## Develop
 
 ```bash
